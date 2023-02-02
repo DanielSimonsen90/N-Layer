@@ -15,7 +15,7 @@ namespace Project.Core
             return true;
         }
 
-        public virtual IEnumerable<TEntity> GetAll() => Set.ToList();
+        public virtual IEnumerable<TEntity> GetAll() => Set.ToList() ?? new List<TEntity>();
         public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate) => Set.Where(predicate).ToList();
 
         public virtual TEntity? Get(TId id)

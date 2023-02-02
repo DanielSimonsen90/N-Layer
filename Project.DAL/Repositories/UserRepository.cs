@@ -17,6 +17,12 @@ namespace Project.DAL.Repositories
 
             return base.Add(entity);
         }
+
+        public IEnumerable<User> GetUsersNotInDepartment(Department department)
+        {
+            return GetAll().Where(user => user.DepartmentId != department.Id 
+                && user.OwnedDepartment?.Id != department.Id);
+        }
         public User? GetByUsername(string username)
         {
             return Set.FirstOrDefault(u => u.Username == username);

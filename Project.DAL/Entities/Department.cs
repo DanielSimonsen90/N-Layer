@@ -1,4 +1,5 @@
 ﻿using Project.DAL.Entities.DTO;
+using System.Data;
 
 namespace Project.DAL.Entities
 {
@@ -14,9 +15,9 @@ namespace Project.DAL.Entities
             Boss = boss;
             Employees = employees;
         }
-
+        public override string Id { get; set; } = Guid.NewGuid().ToString();
         public User Boss { get; set; }
-        public ICollection<User> Employees { get; set; }
+        public ICollection<User> Employees { get; set; } = new HashSet<User>();
 
         public bool HasEmployee(User user) => EmployeeIds.Contains(user.Id);
     }

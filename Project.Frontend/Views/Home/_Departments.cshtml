@@ -1,0 +1,46 @@
+﻿@using System.Collections.Generic;
+@using Project.DAL.Entities;
+@using Project.BLL;
+
+@model DepartmentViewModel
+@inject DepartmentService DepartmentService
+@inject UnitOfWork UnitOfWork
+
+<section aria-labelledby="department-title">
+    <h1 id="department-title">Departments</h1>
+
+    <partial name="_CreateDepartment" model="Model.Shell" />
+
+    <ul>
+        @foreach (var department in Model.Departments)
+        {
+            <li>
+                <article id="department-@department.Id">
+                    <h2>@department.Name</h2>
+                    <span><b>Boss</b> @department.Boss.Username</span>
+                    <span>@department.Employees.Count employees</span>
+                    
+                    <div class="user-admin-panel">
+                        <form method="post" asp-controller="Department" asp-action="Hire">
+                            <select name="userId">
+                                <option value="">Select a user</option>
+                                @foreach (var user in UnitOfWork.Users.GetUsersNotInDepartment(department))
+                                {
+                                    <option value="@user.Id">@user.Username</option>
+                                }
+                            </select>
+                            <input type="hidden" name="departmentId" value="@department.Id" />
+                            <input type="submit" value="Hire" />
+                        </form>
+                    </div>
+
+                    <button asp-controller="Department" asp-action="Delete" asp-route-id="@department.Id"
+                        type="button"    
+                    >
+                        Delete
+                    </button>
+                </article>
+            </li>
+        }
+    </ul>
+</section>

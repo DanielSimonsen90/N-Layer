@@ -5,12 +5,19 @@ using Repository;
 
 namespace Project.BLL
 {
+    // Move to DAL?
     public abstract class BaseService
     {
-        protected readonly UnitOfWork unitOfWork = new();
         public static bool IsUserInDepartment(User user, Department department)
         {
             return user.DepartmentId == department.Id;
+        }
+        
+        protected readonly UnitOfWork unitOfWork;
+        
+        public BaseService(ProjectDbContext context)
+        {
+            unitOfWork = new UnitOfWork(context);
         }
 
         /// <exception cref="ArgumentNullException">If any argument is null</exception>

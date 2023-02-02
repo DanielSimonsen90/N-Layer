@@ -1,9 +1,12 @@
-﻿using Project.DAL.Entities;
+﻿using Project.DAL;
+using Project.DAL.Entities;
 
 namespace Project.BLL
 {
     public class UserService : BaseService
     {
+        public UserService(ProjectDbContext context) : base(context) {}
+
         public async Task Hire(User user, Department department, bool save = false)
         {
             CheckExists(user, department);
@@ -63,7 +66,7 @@ namespace Project.BLL
             if (department is null) return;
             
             department.Employees.Add(user);
-            department.EmployeeIds.Add(user.Id);
+            //department.EmployeeIds.Add(user.Id);
         }
     }
 }

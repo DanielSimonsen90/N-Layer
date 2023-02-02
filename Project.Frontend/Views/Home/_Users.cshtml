@@ -1,0 +1,60 @@
+﻿@using System.Collections.Generic;
+@using Project.DAL.Entities;
+@using Project.BLL;
+
+@model UserViewModel
+@inject DepartmentService DepartmentService
+@inject UnitOfWork UnitOfWork
+
+<section aria-labelledby="user-title">
+    <h1 id="user-title">Users</h1>
+
+    <partial name="_CreateUser" model="Model.Shell" />
+
+    <ul>
+        @foreach (var user in Model.Users)
+        {
+            Department? bossOfDepartment = DepartmentService.GetDepartmentWhereUserIsBoss(user);
+            
+            <li>
+                <article id="user-@user.Id">
+                    <h2>@user.Username</h2>
+                    @if (!string.IsNullOrEmpty(user.Email))
+                    {
+                        <h3>@user.Email</h3>
+                    }
+                    
+                    <section name="Department">
+                        @if (bossOfDepartment != null)
+                        {
+                            <span class="boss-of-department"><b>Boss of</b> @bossOfDepartment.Name</span>
+                        }
+                        @if (user.Department != null)
+                        {
+                            <span><b>Department</b> @user.Department.Name</span>
+                            <div class="department-admin-panel">
+                                <form method="post" asp-controller="User" asp-action="Move">
+                                    <select name="departmentId">
+                                        <option value="">Move to department</option>
+                                        @foreach (var department in UnitOfWork.Departments.GetAll())
+                                        {
+                                            <option value="@department.Id">@department.Name</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="departmentId" value="@user.Id" />
+                                    <input type="submit" value="Move" />
+                                </form>
+
+                                <button asp-controller="User" asp-action="PromoteToBoss" asp-route-userId="@user.Id">Promote to boss</button>
+                                <button asp-controller="User" asp-action="Fire" asp-route-userId="@user.Id">Fire</button>
+                            </div>
+                        }
+                    </section>
+                    <button asp-controller="User" asp-action="Delete" asp-route-id="@user.Id"
+                        type="button"
+                    >Delete</button>
+                </article>
+            </li>
+        }
+    </ul>
+</section>

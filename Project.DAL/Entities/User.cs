@@ -23,6 +23,7 @@ namespace Project.DAL.Entities
         public string Password { get; set; }
 
         public Department? Department { get; set; }
+        public Department? OwnedDepartment { get; set; }
 
         public bool IsBossFor(Department department) => department.BossId == Id;
     }

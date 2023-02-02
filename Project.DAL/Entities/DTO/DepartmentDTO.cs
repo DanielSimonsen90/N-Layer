@@ -1,4 +1,5 @@
 ﻿using Project.Core;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project.DAL.Entities.DTO
 {
@@ -22,6 +23,7 @@ namespace Project.DAL.Entities.DTO
         public string Name { get; set; }
         public int BossId { get; set; }
 
+        [NotMapped]
         public ICollection<int> EmployeeIds { get; set; }
     }
 }

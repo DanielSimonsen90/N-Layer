@@ -1,0 +1,23 @@
+﻿@model Department
+@inject UnitOfWork UnitOfWork
+
+<form method="post" asp-controller="Department" asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" required />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="BossId"></label>
+        <select asp-for="BossId" class="form-control">
+            <option value="">Select a boss</option>
+            @foreach (var user in UnitOfWork.Users.GetAll())
+            {
+                <option value="@user.Id">@user.Username</option>
+            }
+        </select>
+        <span asp-validation-for="BossId" class="text-danger"></span>
+    </div>
+    <input type="submit" value="Create Department" />
+</form>

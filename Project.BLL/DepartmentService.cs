@@ -1,10 +1,11 @@
-﻿using Project.DAL.Entities;
+﻿using Project.DAL;
+using Project.DAL.Entities;
 
 namespace Project.BLL
 {
     public class DepartmentService : BaseService
     {
-        public DepartmentService(UserService userService) : base()
+        public DepartmentService(ProjectDbContext context, UserService userService) : base(context)
         {
             _userService = userService;
         }

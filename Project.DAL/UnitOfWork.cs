@@ -5,7 +5,7 @@ namespace Project.DAL
 {
     public class UnitOfWork : BaseUnitOfWork<ProjectDbContext>
     {
-        public UnitOfWork() : base(new ProjectDbContext())
+        public UnitOfWork(ProjectDbContext context) : base(context)
         {
             Users = new(Context);
             Departments = new(Context);
