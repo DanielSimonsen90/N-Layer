@@ -24,6 +24,6 @@ namespace Project.DAL.Entities.DTO
         public int BossId { get; set; }
 
         [NotMapped]
-        public ICollection<int> EmployeeIds { get; set; }
+        public ICollection<int> EmployeeIds { get; set; } = new HashSet<int>();
     }
 }

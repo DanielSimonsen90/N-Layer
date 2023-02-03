@@ -42,19 +42,12 @@ namespace Project.BLL
         public async Task Fire(User user, bool save = false)
         {
             if (user is null) throw new ArgumentNullException(nameof(user));
+            if (user.Department is not Department department) return;
 
-            if (user.Department is Department department)
-            {
-                department.Employees.Remove(user);
-                department.EmployeeIds.Remove(user.Id);
-                unitOfWork.Departments.Update(department);
+            department.Employees.Remove(user);
+            department.EmployeeIds.Remove(user.Id);
+            unitOfWork.Departments.Update(department);
 
-                department.Employees.Remove(user);
-                department.EmployeeIds.Remove(user.Id);
-            }
-
-            unitOfWork.Users.Delete(user);
-            
             await HandleSave(save);
         }
 

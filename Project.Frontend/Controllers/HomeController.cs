@@ -14,7 +14,7 @@ namespace Project.Frontend.Controllers
 
         public IActionResult Index()
         {
-            var userModel = new UserViewModel(unitOfWork.Users.GetAll());
+            var userModel = new UserViewModel(unitOfWork.Users.GetAll().OrderByDescending(u => u.OwnedDepartment is not null));
             var departmentModel = new DepartmentViewModel(unitOfWork.Departments.GetAll());
 
             return View(new HomeViewModel(userModel, departmentModel));

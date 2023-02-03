@@ -1,9 +1,3 @@
-*,
-*:before,
-*:after {
-    box-sizing: border-box;
-}
-
 html {
     font-size: 14px;
     position: relative;
@@ -16,17 +10,112 @@ html {
     }
 }
 
+body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
 main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 1rem;
+    grid-template-rows: fit-content auto auto;
+    grid-template-areas:
+        "user-title department-title"
+        "user-create department-create"
+        "user-list department-list";
+    grid-gap: 1rem 5rem;
+
+    > h1 {
+        grid-area: department-title;
+
+        &:first-of-type {
+            grid-area: user-title;
+        }
+    }
+    > form {
+        grid-area: department-create;
+
+        &:first-of-type {
+            grid-area: user-create;
+        }
+    }
+    > ul {
+        grid-area: department-list;
+        grid-template-columns: 1fr 1fr;
+
+        &:first-of-type {
+            grid-area: user-list;
+        }
+    }
+    
+    header {
+        display: flex;
+        align-items: center;
+        gap: 1ch;
+    }
+
+    button, a {
+        display: grid;
+        align-items: center;
+
+        padding: .25em .5em;
+        margin: .5ch initial;
+        
+        border: 1px solid #222;
+        border-radius: .25em;
+        background-color: #ddd;
+        text-decoration: none;
+        color: black;
+        max-height: 2rem;
+    }
+}
+
+footer {
+    position: relative !important;
 }
 
 form {
-    display: grid;
-    grid-gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    grid-gap: .5rem;
 }
 
-input[type=submit] {
-    margin: 0 auto;
+ul {
+    padding-left: 1em;
+
+    display: grid;
+    gap: 1em;
+}
+
+li {
+    list-style: none;
+}
+
+h2, h3 {
+    margin-bottom: unset;
+}
+h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+:is(.user-admin-panel, .department-admin-panel) form {
+    display: grid;
+    grid-template-columns: auto min-content;
+}
+
+.department-admin-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5em;
+    margin-top: .5em;
+
+    form {
+        flex: 1 1 100%;
+    }
+}
+
+section[name=Department] {
+    display: grid;
 }

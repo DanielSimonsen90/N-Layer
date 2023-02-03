@@ -21,15 +21,26 @@ namespace Project.BLL
                 await _userService.Move(user, department);
             }
 
+            User? currentBoss = unitOfWork.Users.Get(department.BossId);
+            if (currentBoss is not null)
+            {
+                await _userService.Move(currentBoss, department);
+            }
+
             department.Boss = user;
             department.BossId = user.Id;
-
             unitOfWork.Departments.Update(department);
+
+            user.Department = null;
+            user.DepartmentId = null;
+            unitOfWork.Users.Update(user);
 
             await HandleSave(save);
         }
 
         public Department? GetDepartmentWhereUserIsBoss(User user) => unitOfWork.Departments
             .Get(department => department.BossId == user.Id);
+        public IEnumerable<Department> GetDepartmetsExcludeUsersDepartment(User user) => unitOfWork.Departments
+            .GetAll(Department => Department.Id != user.DepartmentId);
     }
 }

@@ -29,7 +29,7 @@ namespace Project.Frontend.Controllers
 
         public async Task<IActionResult> PromoteToBoss(int userId)
         {
-            User? user = UnitOfWork.Users.Get(userId);
+            User? user = UnitOfWork.Users.GetWithDepartment(userId);
             if (user is not null && user.Department is not null) 
                 await DepartmentService.Promote(user, user.Department, true);
 
@@ -38,7 +38,7 @@ namespace Project.Frontend.Controllers
 
         public async Task<IActionResult> Fire(int userId)
         {
-            User? user = UnitOfWork.Users.Get(userId);
+            User? user = UnitOfWork.Users.GetWithDepartment(userId);
             if (user is not null)
                 await UserService.Fire(user, true);
 
