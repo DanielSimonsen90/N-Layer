@@ -6,6 +6,7 @@ namespace Project.Core
 {
     public abstract partial class BaseRepository<TEntity, TId, TDbContext> : IBaseRepository<TEntity, TId>
     {
+        /// <inheritdoc/>
         public virtual bool Add(TEntity entity)
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
@@ -15,9 +16,12 @@ namespace Project.Core
             return true;
         }
 
+        /// <inheritdoc/>
         public virtual IEnumerable<TEntity> GetAll() => Set.ToList() ?? new List<TEntity>();
+        /// <inheritdoc/>
         public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate) => Set.Where(predicate).ToList();
 
+        /// <inheritdoc/>
         public virtual TEntity? Get(TId id)
         {
             bool invalidNumber = id is int numId && numId < 0;
@@ -27,7 +31,10 @@ namespace Project.Core
 
             return Set.Find(id);
         }
+        
+        /// <inheritdoc/>
         public virtual TEntity? Get(Expression<Func<TEntity, bool>> predicate) => Set.FirstOrDefault(predicate);
+        /// <inheritdoc/>
         public virtual TEntity? GetWithRelations(TId id, params Expression<Func<TEntity, object?>>[] relations)
         {
             IQueryable<TEntity> query = Set;
@@ -40,6 +47,7 @@ namespace Project.Core
             return query.FirstOrDefault(e => e.Id!.Equals(id));
         }
 
+        /// <inheritdoc/>
         public virtual bool Update(TEntity entity)
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
@@ -51,6 +59,7 @@ namespace Project.Core
             return true;
         }
 
+        /// <inheritdoc/>
         public virtual bool Delete(TId id)
         {
             TEntity? existing = Get(id);
@@ -58,6 +67,7 @@ namespace Project.Core
 
             return Delete(existing);
         }
+        /// <inheritdoc/>
         public virtual bool Delete(TEntity entity)
         {
             if (entity is null) throw new EntityNotFoundException<TEntity, TId>(nameof(entity), entity);

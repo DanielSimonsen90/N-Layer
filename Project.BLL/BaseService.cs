@@ -5,14 +5,22 @@ using Repository;
 
 namespace Project.BLL
 {
-    // Move to DAL?
+    /// <summary>
+    /// Base service for all services.
+    /// </summary>
     public abstract class BaseService
     {
-        public static bool IsUserInDepartment(User user, Department department)
-        {
-            return user.DepartmentId == department.Id;
-        }
-        
+        /// <summary>
+        /// Check if <paramref name="user"/> is in <paramref name="department"/>.
+        /// </summary>
+        /// <param name="user">The <see cref="User"/> to check.</param>
+        /// <param name="department">The <see cref="Department"/> to check.</param>
+        /// <returns>True if <paramref name="user"/> is in <paramref name="department"/>.</returns>
+        public static bool IsUserInDepartment(User user, Department department) => user.DepartmentId == department.Id;
+
+        /// <summary>
+        /// Protected Unit of Work. Protected so child services can use it.
+        /// </summary>
         protected readonly UnitOfWork unitOfWork;
         
         public BaseService(ProjectDbContext context)
@@ -20,6 +28,12 @@ namespace Project.BLL
             unitOfWork = new UnitOfWork(context);
         }
 
+        /// <summary>
+        /// Check if <paramref name="user"/> and <paramref name="department"/> are provided and in database.
+        /// This method is only used to throw exceptions.
+        /// </summary>
+        /// <param name="user">The <see cref="User"/> to check.</param>
+        /// <param name="department">The <see cref="Department"/> to check.</param>
         /// <exception cref="ArgumentNullException">If any argument is null</exception>
         /// <exception cref="EntityNotFoundException{User, int}">If user does not exist</exception>
         /// <exception cref="EntityNotFoundException{Department, string}">If department does not exist</exception>
@@ -41,6 +55,11 @@ namespace Project.BLL
             if (save) await unitOfWork.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Uses <see cref="UnitOfWork"/> to state <paramref name="user"/> and <paramref name="department"/> as changed
+        /// </summary>
+        /// <param name="user">The user to update</param>
+        /// <param name="department">The department to update</param>
         protected void UpdateUserAndDepartment(User user, Department department)
         {
             unitOfWork.Users.Update(user);

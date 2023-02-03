@@ -5,32 +5,21 @@ using Project.DAL.Repositories.IRepositories;
 
 namespace Project.DAL.Repositories
 {
+    /// <summary>
+    /// Repository for <see cref="User"/> entities.
+    /// </summary>
     public class UserRepository : BaseRepository<User, int, ProjectDbContext>, IUserRepository
     {
         public UserRepository(ProjectDbContext context) : base(context) {}
 
+        // Set the reference to ProjectDbContext.Users.
         protected override DbSet<User> Set => _context.Users;
 
-        public override bool Add(User entity)
-        {
-            // Validation
+        public IEnumerable<User> GetUsersNotInDepartment(Department department) => GetAll().Where(user => 
+            user.DepartmentId != department.Id 
+            && user.OwnedDepartment?.Id != department.Id);
+        public User? GetByUsername(string username) => Set.FirstOrDefault(u => u.Username == username);
 
-            return base.Add(entity);
-        }
-
-        public IEnumerable<User> GetUsersNotInDepartment(Department department)
-        {
-            return GetAll().Where(user => user.DepartmentId != department.Id 
-                && user.OwnedDepartment?.Id != department.Id);
-        }
-        public User? GetByUsername(string username)
-        {
-            return Set.FirstOrDefault(u => u.Username == username);
-        }
-
-        public User? GetWithDepartment(int id)
-        {
-            return GetWithRelations(id, user => user.Department);
-        }
+        public User? GetWithDepartment(int id) => GetWithRelations(id, user => user.Department);
     }
 }

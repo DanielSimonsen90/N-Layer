@@ -5,12 +5,18 @@ using Project.DAL.Repositories.IRepositories;
 
 namespace Project.DAL.Repositories
 {
+    /// <summary>
+    /// Repository for <see cref="Department"/> entities.
+    /// </summary>
     public class DepartmentRepository : BaseRepository<Department, string, ProjectDbContext>, IDepartmentRepository
     {
         public DepartmentRepository(ProjectDbContext context) : base(context) { }
 
+        // Set the reference to ProjectDbContext.Departments.
         protected override DbSet<Department> Set => _context.Departments;
 
+        /// <inheritdoc/>
+        /// <exception cref="InvalidOperationException">If boss found from <paramref name="entity"/> is null.</exception>
         public override bool Add(Department entity)
         {
             if (!base.Add(entity)) return false;
@@ -23,19 +29,8 @@ namespace Project.DAL.Repositories
             return true;
         }
 
-        public Department? GetByName(string name)
-        {
-            return Set.FirstOrDefault(d => d.Name == name);
-        }
-
-        public Department? GetWithBoss(string id)
-        {
-            return GetWithRelations(id, department => department.Boss);
-        }
-
-        public Department? GetWithEmployees(string id)
-        {
-            return GetWithRelations(id, department => department.Employees);
-        }
+        public Department? GetByName(string name) => Set.FirstOrDefault(d => d.Name == name);
+        public Department? GetWithBoss(string id) => GetWithRelations(id, department => department.Boss);
+        public Department? GetWithEmployees(string id) => GetWithRelations(id, department => department.Employees);
     }
 }

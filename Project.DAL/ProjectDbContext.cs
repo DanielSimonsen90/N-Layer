@@ -3,18 +3,29 @@ using Project.DAL.Entities;
     
 namespace Project.DAL
 {
+    /// <summary>
+    /// The DbContext of the project. This is also called ApplicationDbContext.
+    /// </summary>
     public class ProjectDbContext : DbContext
     {
         public ProjectDbContext() {}
         public ProjectDbContext(DbContextOptions options) : base(options) {}
         
+        /// <summary>
+        /// Users in the database
+        /// </summary>
         public DbSet<User> Users { get; set; }
+        
+        /// <summary>
+        /// Departments in the database
+        /// </summary>
         public DbSet<Department> Departments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
+            // Define relationships between entities.
             builder.Entity<Department>()
                 .HasOne(d => d.Boss)
                 .WithOne(u => u.OwnedDepartment)
